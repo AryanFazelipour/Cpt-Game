@@ -16,16 +16,25 @@ MARGIN = 5
 SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN
 SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 
-
 grid = []
 
+block_x = 15
+block_y = 65
+
+right_pressed = False
 
 
 def on_update(delta_time):
-    pass
+    global right_pressed, block_x
+
+    if right_pressed:
+        block_x += 25
+
 
 
 def on_draw():
+    global block_x, block_y
+
     arcade.start_render()
     # Draw the grid
     for row in range(18):
@@ -41,12 +50,21 @@ def on_draw():
 
     arcade.draw_rectangle_filled(430, 235, 250, 500, arcade.color.BEIGE)
 
+    arcade.draw_rectangle_filled(block_x, block_y, 20, 20, arcade.color.DARK_KHAKI)
+
 def on_key_press(key, modifiers):
-    pass
+    global right_pressed
+
+    if key == arcade.key.D:
+        right_pressed = True
+
 
 
 def on_key_release(key, modifiers):
-    pass
+    global right_pressed
+
+    if key == arcade.key.D:
+        right_pressed = False
 
 
 def on_mouse_press(x, y, button, modifiers):
@@ -58,7 +76,7 @@ def setup():
 
     arcade.open_window(SCREEN_WIDTH, SCREEN_HEIGHT, "Tetris")
     arcade.set_background_color(arcade.color.LIGHT_BLUE)
-    arcade.schedule(on_update, 1/60)
+    arcade.schedule(on_update, 1 / 10)
 
     # Override arcade window methods
     window = arcade.get_window()
