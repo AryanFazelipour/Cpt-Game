@@ -19,19 +19,38 @@ SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 grid = []
 
 block_x = 15
-block_y = 65
+block_y = 365
+
+gravity = 25
+time = 0
 
 right_pressed = False
-
+left_pressed = False
+down_pressed = False
 
 def on_update(delta_time):
-    global right_pressed, block_x
+    global right_pressed, left_pressed, down_pressed, block_x, block_y, time
 
-    if right_pressed:
+    time += 1
+
+    if time == 10:
+        block_y -= 25
+        time = 0
+
+    if right_pressed and block_x <= 265:
         block_x += 25
 
+    if left_pressed and block_x >= 40:
+        block_x -= 25
 
+    if down_pressed and block_y >= 40:
+        block_y -= 25
 
+    if block_x > 360:
+        if right_pressed:
+            block_x += 0
+
+    print(delta_time)
 def on_draw():
     global block_x, block_y
 
@@ -50,21 +69,31 @@ def on_draw():
 
     arcade.draw_rectangle_filled(430, 235, 250, 500, arcade.color.BEIGE)
 
-    arcade.draw_rectangle_filled(block_x, block_y, 20, 20, arcade.color.DARK_KHAKI)
+    arcade.draw_rectangle_filled(block_x, block_y, 20, 20, arcade.color.PURPLE_PIZZAZZ)
 
 def on_key_press(key, modifiers):
-    global right_pressed
+    global right_pressed, left_pressed, down_pressed, block_x, block_y
 
     if key == arcade.key.D:
         right_pressed = True
 
+    if key == arcade.key.A:
+        left_pressed = True
 
+    if key == arcade.key.S:
+        down_pressed = True
 
 def on_key_release(key, modifiers):
-    global right_pressed
+    global right_pressed, left_pressed, down_pressed, block_x, block_y
 
     if key == arcade.key.D:
         right_pressed = False
+
+    if key == arcade.key.A:
+        left_pressed = False
+
+    if key == arcade.key.S:
+        down_pressed = False
 
 
 def on_mouse_press(x, y, button, modifiers):
